@@ -16,6 +16,9 @@ class StopLoss
 
 	def handle msg
 		@current_price = msg.new_price if msg.new_price > @current_price
+
+		return :sell if msg.new_price <= @current_price - @trail
+
 		:do_nothing
 	end
 end
