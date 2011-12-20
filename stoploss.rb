@@ -7,6 +7,7 @@ class StopLoss
 		@current_price = 0
 		@time_since_last_price_change = 0
 		@delta_for_price_up = 15
+		@delta_for_price_down = 30
 	end
 
 	def handle msg, arg
@@ -19,8 +20,6 @@ class StopLoss
 		@latest_price = new_price
 		@time_since_last_price_change = 0		
 
-		return :sell if new_price <= @current_price - @trail
-
 		:do_nothing
 	end
 
@@ -30,6 +29,12 @@ class StopLoss
 		if @time_since_last_price_change >= @delta_for_price_up and @latest_price > @current_price then
 			@current_price = @latest_price
 			@time_since_last_price_change = 0
+			return :do_nothing
+		end
+		
+		if @time_since_last_price_change >= @delta_for_price_down and @latest_price <= @current_price - @trail then
+			@time_since_last_price_change = 0
+			return :sell
 		end
 		
 		:do_nothing
