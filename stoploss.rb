@@ -9,9 +9,9 @@ end
 class StopLoss
 	attr_reader :current_price
 
-	def initialize trail, current_price
+	def initialize trail
 		@trail = trail
-		@current_price = current_price
+		@current_price = 0
 	end
 
 	def handle msg
