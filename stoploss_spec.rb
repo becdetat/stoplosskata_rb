@@ -32,10 +32,11 @@ describe StopLoss, '#handle' do
 		action = stoploss.handle :price_changed, 10.5
 		action.should == :do_nothing
 	end
-	it 'triggers sell when price moves up then down below threshold' do
+	it 'triggers sell when price moves up and holds then moves down below threshold' do
 		stoploss = StopLoss.new 1
 		stoploss.handle :price_changed, 10
 		stoploss.handle :price_changed, 11
+		stoploss.handle :time_changed, 15
 		action = stoploss.handle :price_changed, 9.5
 		action.should == :sell
 	end
@@ -54,11 +55,19 @@ describe StopLoss, '#current_price' do
 		stoploss.handle :price_changed, 9
 		stoploss.current_price.should == 10
 	end
-	it 'is increased when the new price is higher' do
+	it 'is increased when the new price is higher and delta_for_price_up has elapsed' do
 		stoploss = StopLoss.new 1
 		stoploss.handle :price_changed, 10
 		stoploss.handle :price_changed, 11
+		stoploss.handle :time_changed, 15
 		stoploss.current_price.should == 11
+	end
+	it 'stays the same when the new price is higher and delta_for_price_up has not elapsed' do
+		stoploss = StopLoss.new 1
+		stoploss.handle :price_changed, 10
+		stoploss.handle :price_changed, 11
+		stoploss.handle :time_changed, 9
+		stoploss.current_price.should == 10
 	end
 end
 
