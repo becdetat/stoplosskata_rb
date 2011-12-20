@@ -61,3 +61,13 @@ describe StopLoss, '#current_price' do
 		stoploss.current_price.should == 11
 	end
 end
+
+describe StopLoss, '#current_time' do
+	it 'increases correctly' do
+		stoploss = StopLoss.new 1
+		stoploss.handle TimeChangedMessage.new 1
+		stoploss.handle TimeChangedMessage.new 3
+		stoploss.handle TimeChangedMessage.new 5
+		stoploss.current_time.should == 9
+	end
+end
