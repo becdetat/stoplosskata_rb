@@ -2,14 +2,10 @@ class PriceChangedMessage
 end
 
 class StopLoss
-	def HandleMessage msg
-		puts 'Received a message'
+	def handle msg
+		:do_nothing
 	end
 end
 
 
-
-stopLoss = StopLoss.new
-stopLoss.HandleMessage PriceChangedMessage.new
-stopLoss.HandleMessage PriceChangedMessage.new
 
