@@ -62,12 +62,12 @@ describe StopLoss, '#current_price' do
 	end
 end
 
-describe StopLoss, '#current_time' do
+describe StopLoss, '#time_since_last_price_change' do
 	it 'increases correctly' do
 		stoploss = StopLoss.new 1
 		stoploss.handle :time_changed, 1
 		stoploss.handle :time_changed, 3
 		stoploss.handle :time_changed, 5
-		stoploss.current_time.should == 9
-	end
+		stoploss.time_since_last_price_change.should == 9
+	end	
 end

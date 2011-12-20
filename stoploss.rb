@@ -1,11 +1,11 @@
 class StopLoss
 	attr_reader :current_price
-	attr_reader :current_time
+	attr_reader :time_since_last_price_change
 
 	def initialize trail
 		@trail = trail
 		@current_price = 0
-		@current_time = 0
+		@time_since_last_price_change = 0
 	end
 
 	def handle msg, arg
@@ -22,7 +22,7 @@ class StopLoss
 	end
 
 	def handle_time_changed ticks
-		@current_time += ticks
+		@time_since_last_price_change += ticks
 		:do_nothing
 	end
 end
