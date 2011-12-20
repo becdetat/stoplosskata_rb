@@ -1,18 +1,3 @@
-class PriceChangedMessage
-	attr_reader :new_price
-
-	def initialize new_price
-		@new_price = new_price
-	end
-end
-class TimeChangedMessage
-	attr_reader :ticks
-
-	def initialize ticks
-		@ticks = ticks
-	end
-end
-
 class StopLoss
 	attr_reader :current_price
 	attr_reader :current_time
@@ -23,21 +8,21 @@ class StopLoss
 		@current_time = 0
 	end
 
-	def handle msg
-		return self.handle_price_changed(msg) if msg.respond_to? 'new_price'
-		return self.handle_time_changed(msg) if msg.respond_to? 'ticks'
+	def handle msg, arg
+		return self.handle_price_changed(arg) if msg == :price_changed
+		return self.handle_time_changed(arg) if msg == :time_changed
 	end
 
-	def handle_price_changed msg
-		@current_price = msg.new_price if msg.new_price > @current_price
+	def handle_price_changed new_price
+		@current_price = new_price if new_price > @current_price
 
-		return :sell if msg.new_price <= @current_price - @trail
+		return :sell if new_price <= @current_price - @trail
 
 		:do_nothing
 	end
 
-	def handle_time_changed msg
-		@current_time += msg.ticks
+	def handle_time_changed ticks
+		@current_time += ticks
 		:do_nothing
 	end
 end
