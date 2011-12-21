@@ -2,12 +2,15 @@ class StopLoss
 	attr_reader :current_price
 	attr_reader :time_since_last_price_change
 
-	def initialize
-		@trail = 1
-		@current_price = 0
-		@time_since_last_price_change = 0
-		@delta_for_price_up = 15
-		@delta_for_price_down = 30
+	TRAIL = 1
+	DELTA_FOR_PRICE_UP = 15
+	DELTA_FOR_PRICE_DOWN = 30
+	
+	@current_price = nil
+	@latest_price = nil
+	@time_since_last_price_change = 0
+	
+	def initialize 
 	end
 
 	def handle msg, arg
@@ -16,7 +19,7 @@ class StopLoss
 	end
 
 	def handle_price_changed new_price
-		@current_price = new_price if @current_price == 0
+		@current_price = new_price if @current_price.nil?
 		@latest_price = new_price
 		@time_since_last_price_change = 0		
 
@@ -26,13 +29,13 @@ class StopLoss
 	def handle_time_changed ticks
 		@time_since_last_price_change += ticks
 		
-		if @time_since_last_price_change >= @delta_for_price_up and @latest_price > @current_price then
+		if @time_since_last_price_change >= DELTA_FOR_PRICE_UP and @latest_price > @current_price then
 			@current_price = @latest_price
 			@time_since_last_price_change = 0
 			return :do_nothing
 		end
 		
-		if @time_since_last_price_change >= @delta_for_price_down and @latest_price <= @current_price - @trail then
+		if @time_since_last_price_change >= DELTA_FOR_PRICE_DOWN and @latest_price <= @current_price - TRAIL then
 			@time_since_last_price_change = 0
 			return :sell
 		end
