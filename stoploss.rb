@@ -2,8 +2,8 @@ class StopLoss
 	attr_reader :current_price
 	attr_reader :time_since_last_price_change
 
-	def initialize trail
-		@trail = trail
+	def initialize
+		@trail = 1
 		@current_price = 0
 		@time_since_last_price_change = 0
 		@delta_for_price_up = 15
