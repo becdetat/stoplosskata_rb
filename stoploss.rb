@@ -7,13 +7,12 @@ class StopLoss
 	DELTA_FOR_PRICE_UP = 15
 	DELTA_FOR_PRICE_DOWN = 30
 	
-	@current_price = nil
-	@latest_price = nil
-	@time_since_last_price_change = 0
-	@consumer = nil
-	
 	def initialize consumer
 		@consumer = consumer
+
+		@current_price = nil
+		@latest_price = nil
+		@time_since_last_price_change = 0
 	end
 
 	def handle msg, arg = nil
